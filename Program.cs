@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using tasksef;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 // al metodo AddSqlServer se le pasa el contexto y la cadena de conexion
 // Data Source=nombre del servidor;Initial Catalog=nombre de la base de datos;User Id=usuario;Password=contraseña;TrustServerCertificate=True;
 // TrustServerCertificate=True; es para que no se muestre el error de certificado no confiable
-builder.Services.AddSqlServer<TasksContext>("Data Source=YESID\\SQLEXPRESS;Initial Catalog=Tasks;user id=sa;password=root;TrustServerCertificate=True;");
+// builder.Services.AddSqlServer<TasksContext>("Data Source=YESID\\SQLEXPRESS;Initial Catalog=Tasks;user id=sa;password=root;TrustServerCertificate=True;");
+
+// en este caso se esta utilizando la cadena de conexion de un archivo appsettings.json
+builder.Services.AddSqlServer<TasksContext>(builder.Configuration.GetConnectionString("DefaultConnection"));
 
 var app = builder.Build();
 
