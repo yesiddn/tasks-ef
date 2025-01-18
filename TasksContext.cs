@@ -23,5 +23,20 @@ public class TasksContext : DbContext {
       category.Property(p => p.Name).IsRequired().HasMaxLength(80);
       category.Property(p => p.Description).HasMaxLength(150);
     });
+
+    modelBuilder.Entity<Models.Task>(task =>
+    {
+      task.ToTable("Task");
+      task.HasKey(p => p.Id);
+
+      // p.Tasks es el metodo virtual de la clase Category que tiene la ICollection de tareas
+      task.HasOne(p => p.Category).WithMany(p => p.Tasks).HasForeignKey(p => p.CategoryId);
+      task.Property(p => p.Title).IsRequired().HasMaxLength(80);
+      task.Property(p => p.Description).HasMaxLength(150);
+      task.Property(p => p.IsComplete).HasDefaultValue(false);
+      task.Property(p => p.Priority).HasConversion<string>();
+      task.Property(p => p.CreatedAt).HasDefaultValueSql("GETDATE()");
+      // la propiedad Resume no se mapea a la base de datos
+    });
   }
 }

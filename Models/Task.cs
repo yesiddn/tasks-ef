@@ -5,14 +5,14 @@ namespace tasksef.Models;
 
 public class Task
 {
-  [Key]
+  // [Key]
   public Guid Id { get; set; }
 
-  [ForeignKey("CategoryId")]
+  // [ForeignKey("CategoryId")]
   public Guid CategoryId { get; set; }
 
-  [Required]
-  [MaxLength(80)]
+  // [Required]
+  // [MaxLength(80)]
   public string Title { get; set; }
 
   public string Description { get; set; }
@@ -26,7 +26,7 @@ public class Task
   public virtual Category Category { get; set; }
 
   // con esta anotación se indica que la propiedad Resume no se mapea a la base de datos
-  [NotMapped]
+  // [NotMapped]
   public string Resume { get; set; }
 }
 
