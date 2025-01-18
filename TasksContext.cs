@@ -37,6 +37,7 @@ public class TasksContext : DbContext {
       task.Property(p => p.Priority).HasConversion<string>();
       task.Property(p => p.CreatedAt).HasDefaultValueSql("GETDATE()");
       // la propiedad Resume no se mapea a la base de datos
+      task.Ignore(p => p.Resume);
     });
   }
 }
