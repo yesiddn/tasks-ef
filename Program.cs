@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using tasksef;
+using tasksef.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,5 +29,18 @@ app.MapGet("/dbConnection", ([FromServices] TasksContext dbContext) =>
     return Results.Ok($"Database created: {dbContext.Database.IsInMemory()}");
   }
 );
+
+app.MapGet("/api/tasks", ([FromServices] TasksContext dbContext) =>
+{
+  // retorna la lista de tareas
+  // return Results.Ok(dbContext.Tasks.ToList());
+  
+  // retorna la lista de tareas con prioridad baja
+  // return Results.Ok(dbContext.Tasks.Where(t => t.Priority == Priority.Low).ToList());
+
+  // retorna la lista de tareas con su categoria
+  // como sucede en java, esto genera un bucle infinito, ya que la tarea incluye la categoria y la categoria incluye la tarea, para solucionar esto se debe agregar un atributo JsonIgnore en la propiedad Category de la clase Task
+  return Results.Ok(dbContext.Tasks.Include(t => t.Category));
+});
 
 app.Run();
