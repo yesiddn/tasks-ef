@@ -22,6 +22,7 @@ public class TasksContext : DbContext {
 
       category.Property(p => p.Name).IsRequired().HasMaxLength(80);
       category.Property(p => p.Description).HasMaxLength(150);
+      category.Property(p => p.Difficulty);
     });
 
     modelBuilder.Entity<Models.Task>(task =>

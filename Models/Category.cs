@@ -14,7 +14,16 @@ namespace tasksef.Models
 
     public string Description { get; set; }
 
+    public Difficulty Difficulty { get; set; }
+
     // de esta forma se establece la relación con la clase Task y si queremos incluir una colección de tareas en la clase Category en una consulta, se puede hacer
     public virtual ICollection<Task> Tasks { get; set; }
+  }
+
+  public enum Difficulty
+  {
+    Easy,
+    Medium,
+    Hard
   }
 }
