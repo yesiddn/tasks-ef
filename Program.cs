@@ -19,7 +19,7 @@ var app = builder.Build();
 
 app.MapGet("/", () => "Hello World!");
 
-app.MapGet("/dbConection", ([FromServices] TasksContext dbContext) =>
+app.MapGet("/dbConnection", ([FromServices] TasksContext dbContext) =>
   {
     // se asegura que la base de datos se haya creado, si no existe la crea
     dbContext.Database.EnsureCreated();
