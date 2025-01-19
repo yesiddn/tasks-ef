@@ -56,4 +56,29 @@ app.MapPost("/api/tasks", async ([FromServices] TasksContext dbContext, [FromBod
   return Results.Ok(task);
 });
 
+app.MapPut("/api/tasks/{id}", async (
+  [FromServices] TasksContext dbContext, 
+  [FromBody] tasksef.Models.Task task, 
+  [FromRoute] Guid id
+) =>
+{
+  var taskToUpdate = await dbContext.Tasks.FindAsync(id);
+
+  if (taskToUpdate == null)
+  {
+    return Results.NotFound();
+  }
+
+  taskToUpdate.CategoryId = task.CategoryId;
+  taskToUpdate.Title = task.Title;
+  taskToUpdate.Description = task.Description;
+  taskToUpdate.IsComplete = task.IsComplete;
+  taskToUpdate.Priority = task.Priority;
+
+  // esto actualiza la tarea en la base de datos automaticamente ya que al obtener la tarea con el contexto, esta se convierte en un objeto rastreado por el contexto, por lo que cualquier cambio que se haga en el objeto se reflejara en la base de datos
+  await dbContext.SaveChangesAsync();
+
+  return Results.Ok(taskToUpdate);
+});
+
 app.Run();
