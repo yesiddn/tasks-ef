@@ -39,8 +39,21 @@ app.MapGet("/api/tasks", ([FromServices] TasksContext dbContext) =>
   // return Results.Ok(dbContext.Tasks.Where(t => t.Priority == Priority.Low).ToList());
 
   // retorna la lista de tareas con su categoria
-  // como sucede en java, esto genera un bucle infinito, ya que la tarea incluye la categoria y la categoria incluye la tarea, para solucionar esto se debe agregar un atributo JsonIgnore en la propiedad Category de la clase Task
+  // como sucede en java, esto genera un bucle infinito, ya que la tarea incluye la categoria y la categoria incluye la tarea, para solucionar esto se debe agregar un atributo JsonIgnore en la propiedad Tasks de la clase Category
   return Results.Ok(dbContext.Tasks.Include(t => t.Category));
+});
+
+app.MapPost("/api/tasks", async ([FromServices] TasksContext dbContext, [FromBody] tasksef.Models.Task task) =>
+{
+  task.Id = Guid.NewGuid();
+  task.CreatedAt = DateTime.Now;
+
+  // hay dos formas de agregar una tarea a la base de datos
+  await dbContext.AddAsync(task); // estos metodos tambien se pueden usan sin el await asi -> dbContext.Tasks.Add(task);
+  // await dbContext.Tasks.AddAsync(task);
+  await dbContext.SaveChangesAsync(); // tambien tiene el metodo SaveChanges y es importante usarlo despues de agregar o modificar datos en la base de datos para que los cambios se guarden
+
+  return Results.Ok(task);
 });
 
 app.Run();
